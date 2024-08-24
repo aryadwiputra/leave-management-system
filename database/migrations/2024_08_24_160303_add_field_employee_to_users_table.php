@@ -15,11 +15,11 @@ return new class extends Migration
             // relation to positions table
             $table->foreignId('position_id')->after('id')->nullable()->constrained('positions')->onUpdate('cascade')->onDelete('set null');
             // field username
-            $table->string('username')->nullable();
+            $table->string('username')->after('name')->nullable();
             // field employee number
-            $table->string('phone')->nullable();
+            $table->string('phone')->after('username')->nullable();
             // field join year
-            $table->string('join_year')->nullable();
+            $table->string('join_year')->after('phone')->nullable();
         });
     }
 
