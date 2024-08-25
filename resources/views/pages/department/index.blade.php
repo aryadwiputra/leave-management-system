@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @push('style')
     @include('style.datatable')
+    @include('style.select2')
 @endpush
 @section('content')
     <div class="content-header">
@@ -20,6 +21,7 @@
 
     <div class="card">
         <div class="card-body">
+            {{-- Modal Create --}}
             <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -86,6 +88,31 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+
+            {{-- Modal Detail --}}
+            {{-- <div class="modal fade" id="modal-detail">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detail Departemen</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Multiple</label>
+                                <select id="select2-position" name="positions[]" class="select2" multiple="multiple"
+                                    data-placeholder="Jabatan yang tersedia" style="width: 100%;">
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div> --}}
             <table class="table table-bordered" id="data-table">
                 <thead>
                     <tr>
@@ -100,6 +127,9 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $department->name }}</td>
                             <td>
+                                {{-- btn detail
+                                <button type="button" class="btn btn-success" id="detailBtn"
+                                    onclick="detailData({{ $department->id }})">Detail</button> --}}
                                 {{-- btn edit --}}
                                 <button type="button" class="btn btn-primary" id="editBtn"
                                     onclick="editData({{ $department->id }})">Edit</button>
@@ -116,6 +146,7 @@
 
 @push('script')
     @include('scripts.datatable')
+    @include('scripts.select2')
     <script>
         $(function() {
             let table = $("#data-table").DataTable({
@@ -124,6 +155,14 @@
                 "autoWidth": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
+
+            // //Initialize Select2 Elements
+            // $('.select2').select2()
+
+            // //Initialize Select2 Elements
+            // $('.select2bs4').select2({
+            //     theme: 'bootstrap4'
+            // })
 
             $('#departmentForm').on('submit', function(e) {
                 e.preventDefault();
@@ -200,6 +239,45 @@
                 title: message
             });
         }
+
+
+        function detailData(id) {
+            $.ajax({
+                url: "{{ route('dashboard.departments.show', ':id') }}".replace(':id', id),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    $('#modal-detail').modal('show');
+
+                    let select = $('#select2-position');
+                    select.empty(); // Kosongkan select sebelum mengisi dengan data baru
+
+                    if (response.active.length === 0) {
+                        // Jika tidak ada posisi yang aktif, masukkan semua posisi dari `positions`
+                        response.positions.forEach(function(position) {
+                            let option = new Option(position.name, position.id, false, false);
+                            select.append(option);
+                        });
+                    } else {
+                        // Jika ada posisi yang aktif, masukkan hanya posisi yang aktif
+                        response.active.forEach(function(position) {
+                            let option = new Option(position.name, position.id, true, true);
+                            select.append(option);
+                        });
+                    }
+
+                    // Initialize select2 dengan data yang baru dimasukkan
+                    select.trigger('change');
+                },
+                error: function(response) {
+                    displayToast('error', 'Gagal mengambil data departemen.');
+                }
+            });
+        }
+
+
 
         function editData(id) {
             $.ajax({

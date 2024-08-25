@@ -20,7 +20,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
     Route::resource('departments', DepartmentController::class);
     Route::get('departments/get', [DepartmentController::class, 'getData'])->name('departments.get');
-
+    // Route::post('departments/sync-positions', [DepartmentController::class, 'syncPositions'])->name('departments.syncPositions');
 
     Route::resource('positions', PositionController::class);
     Route::get('positions/get', [PositionController::class, 'getData'])->name('positions.get');

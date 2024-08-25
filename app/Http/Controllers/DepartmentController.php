@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -49,7 +50,15 @@ class DepartmentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Show department_position when department_id = $id
+        $department = Department::find($id);
+        $active = $department->positions;
+
+        $positions = Position::all();
+        return response()->json([
+            'active' => $active,
+            'positions' => $positions
+        ]);
     }
 
     /**
@@ -97,4 +106,14 @@ class DepartmentController extends Controller
         $departments = Department::all();
         return json_encode($departments);
     }
+
+    // public function syncPositions(Request $request)
+    // {
+    //     $department = Department::find($request->id);
+    //     $department->positions()->sync($request->positions);
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Position updated successfully.'
+    //     ]);
+    // }
 }
