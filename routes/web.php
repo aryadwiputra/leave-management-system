@@ -18,6 +18,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     })->name('index');
 
     Route::resource('departments', DepartmentController::class);
+    Route::get('departments/get', [DepartmentController::class, 'getData'])->name('departments.get');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

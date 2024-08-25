@@ -30,7 +30,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|unique:departments',
+        ]);
+
+        $department = new Department();
+        $department->name = $request->name;
+        $department->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Department created successfully.'
+        ]);
     }
 
     /**
@@ -46,7 +58,9 @@ class DepartmentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $department = Department::find($id);
+
+        return response()->json($department);
     }
 
     /**
@@ -54,7 +68,19 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|unique:departments,name,' . $id,
+        ]);
+
+        $department = Department::find($id);
+        $department->name = $request->name;
+        $department->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Department updated successfully.'
+        ]);
     }
 
     /**
@@ -62,6 +88,16 @@ class DepartmentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // delete data
+        $department = Department::find($id);
+        $department->forceDelete();
+
+        return json_encode($department);
+    }
+
+    public function getData()
+    {
+        $departments = Department::all();
+        return json_encode($departments);
     }
 }
