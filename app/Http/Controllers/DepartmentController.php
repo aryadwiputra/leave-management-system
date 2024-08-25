@@ -30,7 +30,6 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => 'required|unique:departments',
         ]);
@@ -68,7 +67,6 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $request->validate([
             'name' => 'required|unique:departments,name,' . $id,
         ]);
@@ -88,7 +86,6 @@ class DepartmentController extends Controller
      */
     public function destroy(string $id)
     {
-        // delete data
         $department = Department::find($id);
         $department->forceDelete();
 
