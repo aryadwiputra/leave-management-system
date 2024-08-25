@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', function () {
         return view('pages.dashboard');
-    });
+    })->name('index');
 
     Route::resource('departments', DepartmentController::class);
 
