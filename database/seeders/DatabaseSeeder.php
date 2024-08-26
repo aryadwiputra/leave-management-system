@@ -17,14 +17,49 @@ class DatabaseSeeder extends Seeder
             PositionsSeeder::class,
         ]);
 
-        User::factory()->create([
-            'position_id' => 1,
-            'department_id' => 1,
-            'name' => 'Test User',
-            'username' => 'test',
-            'email' => 'test@example.com',
-            'phone' => '089662164536',
-            'join_year' => '2024',
-        ]);
+        $users = [
+            [
+                'position_id' => 1,
+                'department_id' => 1,
+                'name' => 'Admin',
+                'username' => 'admin',
+                'email' => 'admin@example.com',
+                'phone' => '089662164536',
+                'join_year' => '2024',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'position_id' => 1,
+                'department_id' => 1,
+                'name' => 'User',
+                'username' => 'user',
+                'email' => 'user@example.com',
+                'phone' => '089662164536',
+                'join_year' => '2024',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'position_id' => 1,
+                'department_id' => 1,
+                'name' => 'Guest',
+                'username' => 'guest',
+                'email' => 'guest@example.com',
+                'phone' => '089662164536',
+                'join_year' => '2024',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'position_id' => 1,
+                'department_id' => 1,
+                'name' => 'Staff',
+                'username' => 'staff',
+                'email' => 'staff@example.com',
+                'phone' => '089662164536',
+                'join_year' => '2024',
+                'password' => bcrypt('password'),
+            ]
+        ];
+
+        User::insert($users);
     }
 }
