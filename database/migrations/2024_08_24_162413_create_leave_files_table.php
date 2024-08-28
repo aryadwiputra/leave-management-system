@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leave_file', function (Blueprint $table) {
+        Schema::create('leave_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('leave_id')->constrained('leaves')->onUpdate('cascade')->onDelete('cascade');
             $table->string('path');
