@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -27,6 +28,13 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('positions/get', [PositionController::class, 'getData'])->name('positions.get');
 
     Route::resource('users', UsersController::class);
+
+    Route::get('leaves/create/{type?}', [LeaveController::class, 'create'])->name('leaves.create');
+    Route::get('leaves/{type?}/{status?}', [LeaveController::class, 'index'])->name('leaves.index');
+    Route::post('leaves/store', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::get('/leaves/edit/{id}', [LeaveController::class, 'edit'])->name('leaves.edit');
+    Route::post('/leaves/update/{id}', [LeaveController::class, 'update'])->name('leaves.update');
+    Route::put('leaves/update-status/', [LeaveController::class, 'updateStatus'])->name('leaves.updateStatus');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

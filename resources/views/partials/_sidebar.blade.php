@@ -63,68 +63,76 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-database"></i>
                         <p>
-                            Cuti
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Buat Pengajuan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Menunggu Persetujuan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Cuti Yang Ditolak</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Cuti Yang Disetujui</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-database"></i>
-                        <p>
                             Izin
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('dashboard.leaves.create', ['type' => 'izin']) }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Buat Pengajuan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'izin', 'status' => 'pending']) }}"
+                                class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menunggu Persetujuan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'izin', 'status' => 'rejected']) }}"
+                                class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Izin Yang Ditolak</p>
+                                <p>Cuti Yang Ditolak</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'izin', 'status' => 'approved']) }}"
+                                class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Izin Yang Disetujui</p>
+                                <p>Cuti Yang Disetujui</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-database"></i>
+                        <p>
+                            Cuti
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.create', ['type' => 'cuti']) }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Buat Pengajuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'cuti', 'status' => 'pending']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Menunggu Persetujuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'cuti', 'status' => 'rejected']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Cuti Yang Ditolak</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'cuti', 'status' => 'approved']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Cuti Yang Disetujui</p>
                             </a>
                         </li>
                     </ul>
