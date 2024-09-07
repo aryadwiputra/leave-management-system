@@ -6,7 +6,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserLeaveController;
 use App\Http\Controllers\UsersController;
-use App\Models\UserLeave;
+use App\Models\Leave;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,7 +19,11 @@ Route::get('/', function () {
 
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', function () {
-        return view('pages.dashboard');
+        $izin_pending = Leave::where('status', 'pending')->where('type', 'izin')->count();
+        $sakit_pending = Leave::where('status', 'pending')->where('type', 'sakit')->count();
+        $lembur_pending = Leave::where('status', 'pending')->where('type', 'lembur')->count();
+        $cuti_pending = Leave::where('status', 'pending')->where('type', 'cuti')->count();
+        return view('pages.dashboard', compact('izin_pending', 'sakit_pending', 'lembur_pending', 'cuti_pending'));
     })->name('index');
 
     Route::resource('departments', DepartmentController::class);
