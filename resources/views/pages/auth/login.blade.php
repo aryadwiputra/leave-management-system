@@ -23,9 +23,12 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <!-- /.login-logo -->
+        <div class="login-logo">
+            <img src="{{ asset('logo.png') }}" width="200px" alt="">
+        </div>
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>{{ config('app.name', 'Laravel') }}</b></a>
+                <h1 href="#" class="h1"><b>{{ config('app.name', 'Laravel') }}</b></h1>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Silahkan masuk dengan akun anda</p>
@@ -33,7 +36,6 @@
                 <!-- Konten Form Login Akan Disini -->
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
-
                     <!-- Email Address -->
                     <div class="input-group mb-3">
                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
@@ -75,13 +77,13 @@
                                 <input type="checkbox" id="remember" name="remember"
                                     {{ old('remember') ? 'checked' : '' }}>
                                 <label for="remember">
-                                    {{ __('Remember me') }}
+                                    {{ __('Ingat saya') }}
                                 </label>
                             </div>
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">{{ __('Log in') }}</button>
+                            <button type="submit" class="btn btn-primary btn-block">{{ __('Masuk') }}</button>
                         </div>
                         <!-- /.col -->
                     </div>

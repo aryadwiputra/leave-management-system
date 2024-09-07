@@ -6,7 +6,7 @@
 @section('content')
     <div class="content-header">
         <div class="d-flex justify-content-between">
-            <h4>Data Cuti
+            <h4>Data {{ $type }}
                 @if ($status == 'pending')
                     Menunggu Persetujuan
                 @elseif ($status == 'rejected')

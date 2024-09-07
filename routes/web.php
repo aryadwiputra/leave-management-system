@@ -4,7 +4,9 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserLeaveController;
 use App\Http\Controllers\UsersController;
+use App\Models\UserLeave;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +37,12 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/leaves/edit/{id}', [LeaveController::class, 'edit'])->name('leaves.edit');
     Route::post('/leaves/update/{id}', [LeaveController::class, 'update'])->name('leaves.update');
     Route::put('leaves/update-status/', [LeaveController::class, 'updateStatus'])->name('leaves.updateStatus');
+
+    Route::post('/users/{user_id}/edit/leave/store', [UserLeaveController::class, 'store'])->name('users.leaves.store');
+    Route::get('users-leaves/{id}', [UserLeaveController::class, 'show'])->name('users.leaves.show');
+    Route::put('users-leaves/{id}/update', [UserLeaveController::class, 'update'])->name('users.leaves.update');
+    Route::delete('users-leaves/{id}/destroy', [UserLeaveController::class, 'destroy'])->name('users.leaves.destroy');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

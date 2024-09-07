@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Position;
 use App\Models\User;
+use App\Models\UserLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,7 +68,9 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::with(['position', 'department'])->find($id);
+
+        return response()->json($user);
     }
 
     /**
@@ -75,7 +78,7 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::find($id);
+        $user = User::with(['position', 'department', 'leaves'])->find($id);
         $departments = Department::all();
         $positions = Position::all();
 

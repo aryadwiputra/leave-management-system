@@ -2,6 +2,7 @@
 
 
 @push('style')
+    @include('style.datatable')
     @include('style.select2')
 @endpush
 
@@ -146,14 +147,151 @@
             </form>
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h4>Data Cuti {{ $user->name }}</h4>
+                {{-- button add with modal --}}
+                <button type="button" data-toggle="modal" data-target="#modal-add"
+                    class="btn d-sm-block d-md-block d-lg-block d-xl-block d-none btn-primary mb-2" id="addBtn">
+                    Tambah Data Cuti
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            {{-- Table --}}
+            <table class="table table-bordered" id="data-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tahun</th>
+                        <th>Total</th>
+                        <th>Digunakan</th>
+                        <th>Sisa</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($user->leaves as $leave)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $leave->year }}</td>
+                            <td>{{ $leave->total }}</td>
+                            <td>{{ $leave->used }}</td>
+                            <td>{{ $leave->remaining }}</td>
+                            <td>
+                                @if ($leave)
+                                    {{-- btn detail modal --}}
+                                    <button type="button" class="btn btn-success" id="editBtn"
+                                        onclick="editData({{ $leave?->id }})">Edit</button>
+                                    <button type="button" class="btn btn-danger" id="deleteBtn"
+                                        onclick="deleteData({{ $leave?->id }})">Hapus</button>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- Modal Create Data --}}
+    <div class="modal fade" id="modal-add">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Data Cuti</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('dashboard.users.leaves.store', $user->id) }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="year">Tahun</label>
+                            <input type="number" name="year" class="form-control" id="year"
+                                placeholder="Masukkan tahun">
+                            <div class="text-danger" id="nameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="number" name="total" class="form-control" id="total"
+                                placeholder="Masukkan total cuti">
+                            <div class="text-danger" id="nameError"></div>
+                        </div>
+                        <div class="justify-content-between">
+                            <button type="button" id="dismissModal" class="btn btn-default"
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" id="submitBtn" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- Modal Edit Data -->
+    <div class="modal fade" id="modal-edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Data Cuti</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-edit" method="POST">
+                        @csrf
+                        @method('PUT') <!-- Menggunakan method PUT untuk update -->
+                        <div class="form-group">
+                            <label for="year">Tahun</label>
+                            <input type="number" name="year" class="form-control" id="year-edit"
+                                placeholder="Masukkan tahun">
+                        </div>
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="number" name="total" class="form-control" id="total-edit"
+                                placeholder="Masukkan total cuti">
+                        </div>
+                        <div class="form-group">
+                            <label for="used">Digunakan</label>
+                            <input type="number" name="used" class="form-control" id="used-edit"
+                                placeholder="Masukkan cuti yang digunakan">
+                        </div>
+                        <div class="form-group">
+                            <label for="remaining">Sisa</label>
+                            <input type="number" name="remaining" class="form-control" id="remaining-edit"
+                                placeholder="Masukkan sisa cuti">
+                        </div>
+                        <div class="justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 
 @push('script')
+    @include('scripts.datatable')
     @include('scripts.select2')
 
     <script>
+        let table = $("#data-table").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": true,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
+
         //Initialize Select2 Elements
         $('.select2').select2()
 
@@ -172,5 +310,71 @@
             // btn back disabled
             backBtn.attr('disabled', true);
         });
+
+        function editData(id) {
+            $.ajax({
+                url: "{{ route('dashboard.users.leaves.show', ':id') }}".replace(':id', id),
+                type: 'GET',
+                success: function(response) {
+                    $('#year-edit').val(response.year);
+                    $('#total-edit').val(response.total);
+                    $('#used-edit').val(response.used);
+                    $('#remaining-edit').val(response.remaining);
+
+                    // Set action URL untuk form edit
+                    $('#form-edit').attr('action', "{{ route('dashboard.users.leaves.update', ':id') }}"
+                        .replace(':id', id));
+
+                    // Tampilkan modal
+                    $('#modal-edit').modal('show');
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Gagal!',
+                        xhr.responseJSON.message || 'Terjadi kesalahan saat menampilkan data.',
+                        'error'
+                    );
+                }
+            });
+        }
+
+        function deleteData(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Anda tidak akan dapat mengembalikannya!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('dashboard.users.leaves.destroy', ':id') }}".replace(':id', id),
+                        type: 'DELETE',
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Terhapus!',
+                                response.message,
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload the page after closing the alert
+                            });
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Gagal!',
+                                xhr.responseJSON.message ||
+                                'Terjadi kesalahan saat menghapus pengguna.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
     </script>
 @endpush

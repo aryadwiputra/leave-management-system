@@ -67,8 +67,16 @@ class LeaveController extends Controller
         $leave->leader_id = $request->leader_id;
         $leave->type = $request->type;
         $leave->date = date('Y-m-d');
-        $leave->start = $request->start;
-        $leave->end = $request->end;
+        // Set start dan end berdasarkan type leave
+        if ($request->type == 'lembur') {
+            // Format tanggal dan waktu untuk leave type 'lembur'
+            $leave->start = $request->date . ' ' . $request->start;
+            $leave->end = $request->date . ' ' . $request->end;
+        } else {
+            // Format tanggal dan waktu untuk leave type lainnya
+            $leave->start = $request->start;
+            $leave->end = $request->end;
+        }
         $leave->description = $request->description;
         $leave->status = 'pending';
         $leave->save();
@@ -94,11 +102,11 @@ class LeaveController extends Controller
             case 'cuti':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'cuti'])->with('success', 'Cuti berhasil dibuat');
             case 'sakit':
-                return redirect()->route('dashboard.leaves.index', ['type' => 'cuti'])->with('success', 'Cuti sakit berhasil dibuat');
+                return redirect()->route('dashboard.leaves.index', ['type' => 'sakit'])->with('success', 'Cuti sakit berhasil dibuat');
             case 'izin':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'ijin'])->with('success', 'Izin berhasil dibuat');
             case 'lembur':
-                return redirect()->route('dashboard.leaves.index', ['type' => 'sakit'])->with('success', 'Lembur berhasil dibuat');
+                return redirect()->route('dashboard.leaves.index', ['type' => 'lembur'])->with('success', 'Lembur berhasil dibuat');
             case 'dinas':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'dinas'])->with('success', 'Izin dinas berhasil dibuat');
         }

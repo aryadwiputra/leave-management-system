@@ -8,7 +8,7 @@
 @section('content')
     <div class="content-header">
         <div class="d-flex justify-content-between">
-            <h4>Pengajuan Cuti</h4>
+            <h4>Pengajuan {{ $type }}</h4>
         </div>
     </div>
 
@@ -73,12 +73,27 @@
                         </div>
                     @else
                         <input type="hidden" name="type" id="type" value="{{ $type }}">
+                        @if ($type == 'lembur')
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tanggal</label>
+                                    <input type="date" name="date" class="form-control" id="date"
+                                        placeholder="Tanggal Lembur" value="{{ old('date') }}">
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-md-6">
                             {{-- Date --}}
                             <div class="form-group">
                                 <label>Mulai</label>
-                                <input type="date" name="start" class="form-control" id="start" placeholder="Mulai"
-                                    value="{{ old('start') }}">
+                                @if ($type == 'lembur')
+                                    {{-- time picker --}}
+                                    <input type="time" name="start" class="form-control" id="start"
+                                        placeholder="Mulai" value="{{ old('start') }}">
+                                @else
+                                    <input type="date" name="start" class="form-control" id="start"
+                                        placeholder="Mulai" value="{{ old('start') }}">
+                                @endif
                                 @error('start')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -88,8 +103,14 @@
                             {{-- Date --}}
                             <div class="form-group">
                                 <label>Selesai</label>
-                                <input type="date" name="end" class="form-control" id="end"
-                                    placeholder="Selesai" value="{{ old('end') }}">
+                                @if ($type == 'lembur')
+                                    {{-- time picker --}}
+                                    <input type="time" name="end" class="form-control" id="end"
+                                        placeholder="Mulai" value="{{ old('end') }}">
+                                @else
+                                    <input type="date" name="end" class="form-control" id="end"
+                                        placeholder="Mulai" value="{{ old('end') }}">
+                                @endif
                                 @error('end')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

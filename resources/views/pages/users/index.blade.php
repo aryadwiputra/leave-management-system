@@ -47,6 +47,9 @@
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->join_year }}</td>
                             <td>
+                                {{-- btn detail modal --}}
+                                <button type="button" class="btn btn-success" id="detailBtn"
+                                    onclick="detailData({{ $user->id }})">Detail</button>
                                 <a class="btn btn-primary" href="{{ route('dashboard.users.edit', $user->id) }}">Edit</a>
                                 <button type="button" class="btn btn-danger" id="deleteBtn"
                                     onclick="deleteData({{ $user->id }})">Hapus</button>
@@ -55,6 +58,59 @@
                     @endforeach
             </table>
         </div>
+    </div>
+
+    <div class="modal fade" id="modal-detail">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detail Karyawan</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 py-2">
+                            <label for="name">Nama</label>
+                            <input type="text" name="name" class="form-control" id="nameDetail" disabled>
+                        </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" class="form-control" id="usernameDetail" disabled>
+                        </div>
+                        <div class="col-md-6 py-2">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" class="form-control" id="emailDetail" disabled>
+                        </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="phone">No. HP</label>
+                            <input type="text" name="phone" class="form-control" id="phoneDetail" disabled>
+                        </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="join_year">Tahun Bergabung</label>
+                            <input type="text" name="join_year" class="form-control" id="join_yearDetail" disabled>
+                        </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="department_id">Departemen</label>
+                            <input type="text" name="department_id" class="form-control" id="department_idDetail"
+                                disabled>
+                        </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="position_id">Posisi</label>
+                            <input type="text" name="position_id" class="form-control" id="position_idDetail" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 @endsection
 
@@ -71,6 +127,31 @@
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
         });
+
+        function detailData(id) {
+            $.ajax({
+                url: "{{ route('dashboard.users.show', ':id') }}".replace(':id', id),
+                type: 'GET',
+                success: function(response) {
+                    $('#nameDetail').val(response.name);
+                    $('#usernameDetail').val(response.username);
+                    $('#emailDetail').val(response.email);
+                    $('#phoneDetail').val(response.phone);
+                    $('#join_yearDetail').val(response.join_year);
+                    $('#department_idDetail').val(response.department.name);
+                    $('#position_idDetail').val(response.position.name);
+                    $('#modal-detail').modal('show');
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Gagal!',
+                        xhr.responseJSON.message ||
+                        'Terjadi kesalahan saat menampilkan detail pengguna.',
+                        'error'
+                    );
+                }
+            });
+        }
 
         function deleteData(id) {
             Swal.fire({
