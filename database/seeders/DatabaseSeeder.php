@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
             [
                 'position_id' => 1,
                 'department_id' => 1,
-                'name' => 'Admin',
-                'username' => 'admin',
-                'email' => 'admin@example.com',
+                'name' => 'Super Admin',
+                'username' => 'superadmin',
+                'email' => 'superadmin@example.com',
                 'phone' => '089662164536',
                 'join_year' => '2024',
                 'password' => bcrypt('password'),
@@ -67,5 +67,10 @@ class DatabaseSeeder extends Seeder
         foreach ($users as $user) {
             User::create($user);
         }
+
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class
+        ]);
     }
 }
