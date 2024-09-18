@@ -4,14 +4,14 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserLeaveController;
 use App\Http\Controllers\UsersController;
 use App\Models\Leave;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Force redirect route
+Route::redirect('/', '/login');
 
 // Route::get('/dashboard', function () {
 //     return view('pages.dashboard');
@@ -19,12 +19,26 @@ Route::get('/', function () {
 
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', function () {
-        $izin_pending = Leave::where('status', 'pending')->where('type', 'izin')->count();
-        $sakit_pending = Leave::where('status', 'pending')->where('type', 'sakit')->count();
-        $lembur_pending = Leave::where('status', 'pending')->where('type', 'lembur')->count();
-        $cuti_pending = Leave::where('status', 'pending')->where('type', 'cuti')->count();
-        return view('pages.dashboard', compact('izin_pending', 'sakit_pending', 'lembur_pending', 'cuti_pending'));
+        $izin_pending = Leave::where('status', 'pending')->where('type', 'izin')->count() ?? 0;
+        $sakit_pending = Leave::where('status', 'pending')->where('type', 'sakit')->count() ?? 0;
+        $lembur_pending = Leave::where('status', 'pending')->where('type', 'lembur')->count() ?? 0;
+        $cuti_pending = Leave::where('status', 'pending')->where('type', 'cuti')->count() ?? 0;
+
+        // Ambil data pengajuan per bulan
+        $leaveData = Leave::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->groupBy('month')
+            ->pluck('total', 'month')->toArray();
+
+        // Mengisi data chart (jika tidak ada data pada bulan tertentu, isi dengan 0)
+        $months = range(1, 12);
+        $leaveCounts = [];
+        foreach ($months as $month) {
+            $leaveCounts[] = $leaveData[$month] ?? 0;
+        }
+
+        return view('pages.dashboard', compact('izin_pending', 'sakit_pending', 'lembur_pending', 'cuti_pending', 'leaveCounts'));
     })->name('index');
+
 
     Route::resource('departments', DepartmentController::class);
     Route::get('departments/get', [DepartmentController::class, 'getData'])->name('departments.get');
@@ -47,6 +61,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::put('users-leaves/{id}/update', [UserLeaveController::class, 'update'])->name('users.leaves.update');
     Route::delete('users-leaves/{id}/destroy', [UserLeaveController::class, 'destroy'])->name('users.leaves.destroy');
 
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

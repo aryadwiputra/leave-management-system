@@ -158,11 +158,6 @@
         //Initialize Select2 Elements
         $('.select2').select2()
 
-        //Initialize Select2 Elements
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        })
-
         $('#userForm').on('submit', function(e) {
             // submit button to loading state
             let submitBtn = $('#submitBtn');
