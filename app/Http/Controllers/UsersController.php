@@ -57,6 +57,7 @@ class UsersController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->join_year = $request->join_year;
+        $user->status = 'active';
         $user->password = bcrypt($request->password);
         $user->save();
 
@@ -70,7 +71,9 @@ class UsersController extends Controller
     {
         $user = User::with(['position', 'department'])->find($id);
 
-        return response()->json($user);
+        $leaves = UserLeave::where('user_id', $id)->where('status', 'active')->where('year', date('Y'))->first();
+
+        return response()->json(['user' => $user, 'leaves' => $leaves]);
     }
 
     /**
@@ -109,6 +112,7 @@ class UsersController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->join_year = $request->join_year;
+        $user->status = $request->status;
         $user->save();
 
         return redirect()->route('dashboard.users.index')->with('success', 'User updated successfully');

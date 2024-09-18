@@ -32,6 +32,7 @@
                         <th>Email</th>
                         <th>No. HP</th>
                         <th>Tahun Bergabung</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -46,6 +47,13 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->join_year }}</td>
+                            <td>
+                                @if ($user->status == 'active')
+                                    <span class="badge badge-success">Aktif</span>
+                                @else
+                                    <span class="badge badge-danger">Tidak aktif</span>
+                                @endif
+                            </td>
                             <td>
                                 {{-- btn detail modal --}}
                                 <button type="button" class="btn btn-success" id="detailBtn"
@@ -105,6 +113,30 @@
                             <label for="position_id">Posisi</label>
                             <input type="text" name="position_id" class="form-control" id="position_idDetail" disabled>
                         </div>
+
+                        <div class="col-md-6 py-2">
+                            <label for="status">Status</label>
+                            <input type="text" name="status" class="form-control" id="statusDetail" disabled>
+                        </div>
+                    </div>
+
+                    <h4 class="py-2">Data Cuti</h4>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="cuti">Total</label>
+                            <input type="text" name="total" class="form-control" id="cutiTotal" disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="cuti">Sisa</label>
+                            <input type="text" name="total" class="form-control" id="cutiSisa" disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="cuti">Terpakai</label>
+                            <input type="text" name="total" class="form-control" id="cutiTerpakai" disabled>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,13 +165,20 @@
                 url: "{{ route('dashboard.users.show', ':id') }}".replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    $('#nameDetail').val(response.name);
-                    $('#usernameDetail').val(response.username);
-                    $('#emailDetail').val(response.email);
-                    $('#phoneDetail').val(response.phone);
-                    $('#join_yearDetail').val(response.join_year);
-                    $('#department_idDetail').val(response.department.name);
-                    $('#position_idDetail').val(response.position.name);
+                    console.log(response);
+                    $('#nameDetail').val(response.user.name);
+                    $('#usernameDetail').val(response.user.username);
+                    $('#emailDetail').val(response.user.email);
+                    $('#phoneDetail').val(response.user.phone);
+                    $('#join_yearDetail').val(response.user.join_year);
+                    $('#department_idDetail').val(response.user.department.name);
+                    $('#position_idDetail').val(response.user.position.name);
+                    $('#statusDetail').val(response.user.status);
+                    if (response.leaves) {
+                        $('#cutiTotal').val(response.leaves.total);
+                        $('#cutiSisa').val(response.leaves.remaining);
+                        $('#cutiTerpakai').val(response.leaves.used);
+                    }
                     $('#modal-detail').modal('show');
                 },
                 error: function(xhr) {

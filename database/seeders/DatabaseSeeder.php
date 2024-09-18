@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '089662164536',
                 'join_year' => '2024',
                 'password' => bcrypt('password'),
+                'status' => 'active'
             ],
             [
                 'position_id' => 1,
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '089662164536',
                 'join_year' => '2024',
                 'password' => bcrypt('password'),
+                'status' => 'active'
             ],
             [
                 'position_id' => 1,
@@ -47,6 +49,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '089662164536',
                 'join_year' => '2024',
                 'password' => bcrypt('password'),
+                'status' => 'active'
             ],
             [
                 'position_id' => 1,
@@ -57,6 +60,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '089662164536',
                 'join_year' => '2024',
                 'password' => bcrypt('password'),
+                'status' => 'active'
             ]
         ];
 

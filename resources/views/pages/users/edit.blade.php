@@ -115,6 +115,24 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" name="status" id="status">
+                                <option value="active" {{ old('status', $user->status) == 'active' ? 'selected' : '' }}>
+                                    Active
+                                </option>
+                                <option value="inactive"
+                                    {{ old('status', $user->status) == 'inactive' ? 'selected' : '' }}>
+                                    Inactive
+                                </option>
+                            </select>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" name="password" class="form-control" id="password"
                                 placeholder="Masukkan Password" value="{{ old('password') }}">
@@ -185,14 +203,14 @@
                                     {{-- btn detail modal --}}
                                     <div class="d-flex">
                                         <button type="button" class="btn btn-success" id="editBtn"
-                                        onclick="editData({{ $leave?->id }})">Edit</button>
-                                    <form action="{{ route('dashboard.users.leaves.destroy', $leave?->id) }}"
-                                        method="POST" id="deleteForm{{ $leave?->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger mx-2" id="deleteBtn"
-                                            onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">Hapus</button>
-                                    </form>
+                                            onclick="editData({{ $leave?->id }})">Edit</button>
+                                        <form action="{{ route('dashboard.users.leaves.destroy', $leave?->id) }}"
+                                            method="POST" id="deleteForm{{ $leave?->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger mx-2" id="deleteBtn"
+                                                onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">Hapus</button>
+                                        </form>
                                     </div>
                                     {{-- <button type="button" class="btn btn-danger" id="deleteBtn"
                                         onclick="deleteData({{ $leave?->id }})">Hapus</button> --}}
