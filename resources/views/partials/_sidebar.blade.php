@@ -82,14 +82,15 @@
                                 class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 @php
-                                    $count = \App\Models\Leave::where('type', 'izin')
-                                        ->orWhere('type', 'sakit')
-                                        ->where('status', 'pending')
+                                    $pendingCount = \App\Models\Leave::where('status', 'pending')
+                                        ->where(function ($query) {
+                                            $query->where('type', 'izin')->orWhere('type', 'sakit');
+                                        })
                                         ->count();
                                 @endphp
                                 <p>Menunggu Disetujui
-                                    @if ($count > 0)
-                                        <span class="badge badge-info right">{{ $count }}</span>
+                                    @if ($pendingCount > 0)
+                                        <span class="badge badge-info right">{{ $pendingCount }}</span>
                                     @endif
                                 </p>
                             </a>
@@ -99,14 +100,15 @@
                                 class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 @php
-                                    $count = \App\Models\Leave::where('type', 'izin')
-                                        ->orWhere('type', 'sakit')
-                                        ->where('status', 'rejected')
+                                    $rejectedCount = \App\Models\Leave::where('status', 'rejected')
+                                        ->where(function ($query) {
+                                            $query->where('type', 'izin')->orWhere('type', 'sakit');
+                                        })
                                         ->count();
                                 @endphp
                                 <p>Ditolak
-                                    @if ($count > 0)
-                                        <span class="badge badge-danger right">{{ $count }}</span>
+                                    @if ($rejectedCount > 0)
+                                        <span class="badge badge-danger right">{{ $rejectedCount }}</span>
                                     @endif
                                 </p>
                             </a>
@@ -116,14 +118,15 @@
                                 class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 @php
-                                    $count = \App\Models\Leave::where('type', 'izin')
-                                        ->orWhere('type', 'sakit')
-                                        ->where('status', 'approved')
+                                    $approvedCount = \App\Models\Leave::where('status', 'approved')
+                                        ->where(function ($query) {
+                                            $query->where('type', 'izin')->orWhere('type', 'sakit');
+                                        })
                                         ->count();
                                 @endphp
                                 <p>Disetujui
-                                    @if ($count > 0)
-                                        <span class="badge badge-success right">{{ $count }}</span>
+                                    @if ($approvedCount > 0)
+                                        <span class="badge badge-success right">{{ $approvedCount }}</span>
                                     @endif
                                 </p>
                             </a>
@@ -282,7 +285,7 @@
                 </li> --}}
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('dashboard.report.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-file"></i>
                         <p>
                             Laporan
