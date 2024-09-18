@@ -12,6 +12,15 @@
         </div>
     </div>
 
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-body">
             <form id="leaveForm" action="{{ route('dashboard.leaves.store') }}" method="POST" enctype="multipart/form-data">
@@ -41,11 +50,8 @@
                             <div class="form-group">
                                 <label>Tipe Izin</label>
                                 <select class="select2" style="width: 100%;" name="type" id="type">
-                                    <option value="cuti" id="cuti">Izin</option>
+                                    <option value="izin" id="izin">Izin</option>
                                     <option value="sakit" id="sakit">Sakit</option>
-                                    {{-- <option value="3">Izin</option>
-                                <option value="4">Lembur</option>
-                                <option value="5">Perjalanan Dinas</option> --}}
                                 </select>
                             </div>
                         </div>

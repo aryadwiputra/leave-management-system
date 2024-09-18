@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Leave;
 use App\Models\LeaveAttachment;
 use App\Models\User;
+use App\Models\UserLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -57,16 +58,18 @@ class LeaveController extends Controller
             'user_id' => 'required',
             'leader_id' => 'required',
             'type' => 'required',
-            'start' => 'required',
-            'end' => 'required',
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start',
             'description' => 'required',
         ]);
 
+        // Buat instance Leave baru
         $leave = new Leave();
         $leave->user_id = $request->user_id;
         $leave->leader_id = $request->leader_id;
         $leave->type = $request->type;
         $leave->date = date('Y-m-d');
+
         // Set start dan end berdasarkan type leave
         if ($request->type == 'lembur') {
             // Format tanggal dan waktu untuk leave type 'lembur'
@@ -77,34 +80,60 @@ class LeaveController extends Controller
             $leave->start = $request->start;
             $leave->end = $request->end;
         }
+
         $leave->description = $request->description;
         $leave->status = 'pending';
         $leave->save();
 
-        if ($request->type == 'sakit') {
-            // Simpan file attachment ke dalam direktori 'attachments' di storage publik
-            if ($request->hasFile('attachment')) {
-                $attachment = $request->file('attachment');
+        // Hitung total hari cuti berdasarkan tanggal
+        $total_hari_cuti = (new \Carbon\Carbon($request->start))->diffInDays(new \Carbon\Carbon($request->end)) + 1;
 
-                // Simpan file attachment dengan nama asli file ke dalam direktori 'attachments'
-                $path = $attachment->storeAs('attachments', $attachment->getClientOriginalName(), 'public');
+        // Jika hanya satu hari cuti (tanggal yang sama)
+        if ($request->start === $request->end) {
+            $total_hari_cuti = 1; // Hanya satu hari cuti jika start dan end sama
+        }
 
-                // Buat instance LeaveAttachment dan simpan ke database
-                $leaveAttachment = new LeaveAttachment();
-                $leaveAttachment->leave_id = $leave->id;
-                $leaveAttachment->path = $path; // Gunakan atribut 'path' dari migration
-                $leaveAttachment->save();
+        // Ambil data UserLeave untuk pengguna yang bersangkutan
+        $user_leave = UserLeave::where('user_id', $request->user_id)->where('year', date('Y'))->first();
+
+        if (!$user_leave) {
+            return redirect()->back()->with('error', 'Data cuti tidak ada');
+        }
+
+        // Perbarui jumlah cuti yang digunakan dan sisa cuti
+        if ($user_leave) {
+            // Tambahkan used dengan total hari cuti yang diambil
+            $user_leave->used += $total_hari_cuti;
+
+            // Kurangi remaining dengan total hari cuti yang diambil
+            if ($user_leave->remaining >= $total_hari_cuti) {
+                $user_leave->remaining -= $total_hari_cuti;
+                $user_leave->save();
+            } else {
+                return redirect()->back()->with('error', 'Sisa cuti tidak cukup');
             }
         }
 
+        // Proses lampiran jika tipe cuti adalah sakit
+        if ($request->type == 'sakit' && $request->hasFile('attachment')) {
+            $attachment = $request->file('attachment');
+            $path = $attachment->storeAs('attachments', $attachment->getClientOriginalName(), 'public');
 
+            // Simpan lampiran ke database
+            LeaveAttachment::create([
+                'leave_id' => $leave->id,
+                'path' => $path,
+            ]);
+        }
+
+        // Redirect berdasarkan tipe cuti
         switch ($leave->type) {
             case 'cuti':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'cuti'])->with('success', 'Cuti berhasil dibuat');
             case 'sakit':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'sakit'])->with('success', 'Cuti sakit berhasil dibuat');
             case 'izin':
-                return redirect()->route('dashboard.leaves.index', ['type' => 'ijin'])->with('success', 'Izin berhasil dibuat');
+                return redirect()->route('dashboard.leaves.index', ['type' => 'izin'])->with('success', 'Izin berhasil dibuat');
             case 'lembur':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'lembur'])->with('success', 'Lembur berhasil dibuat');
             case 'dinas':
