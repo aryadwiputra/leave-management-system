@@ -58,9 +58,15 @@
                                 <td>{{ ucfirst($data->type) }}</td>
                             @endif
                             <td>
+                                {{-- Tombol detail --}}
+                                <a href="{{ route('dashboard.leaves.show', $data->id) }}"
+                                    class="btn btn-primary">Detail</a>
+                                <a href="{{ route('dashboard.leaves.show', $data->id) }}"
+                                    class="btn btn-warning text-white">Print</a>
                                 @if ($data->status == 'pending')
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info">{{ ucfirst($data->status) }}</button>
+                                        <button type="button" class="btn btn-info"
+                                            data-toggle="dropdown">{{ ucfirst($data->status) }}</button>
                                         <button type="button" class="btn btn-info dropdown-toggle dropdown-icon"
                                             data-toggle="dropdown">
                                             <span class="sr-only">Toggle Dropdown</span>

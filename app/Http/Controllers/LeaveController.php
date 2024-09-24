@@ -182,4 +182,6 @@ class LeaveController extends Controller
 
         return redirect()->back()->with('success', 'Status berhasil diupdate');
     }
+
+    public function print(string $id) {}
 }

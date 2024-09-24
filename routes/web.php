@@ -5,6 +5,7 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserLeaveController;
 use App\Http\Controllers\UsersController;
 use App\Models\Leave;
@@ -52,6 +53,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('leaves/create/{type?}', [LeaveController::class, 'create'])->name('leaves.create');
     Route::get('leaves/{type?}/{status?}', [LeaveController::class, 'index'])->name('leaves.index');
     Route::post('leaves/store', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::get('leaves/{id}', [LeaveController::class, 'show'])->name('leaves.show');
     Route::get('/leaves/edit/{id}', [LeaveController::class, 'edit'])->name('leaves.edit');
     Route::post('/leaves/update/{id}', [LeaveController::class, 'update'])->name('leaves.update');
     Route::put('leaves/update-status/', [LeaveController::class, 'updateStatus'])->name('leaves.updateStatus');
@@ -62,6 +64,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('users-leaves/{id}/destroy', [UserLeaveController::class, 'destroy'])->name('users.leaves.destroy');
 
     Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+
+    Route::resource('roles', RoleController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
