@@ -48,7 +48,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('positions', PositionController::class);
     Route::get('positions/get', [PositionController::class, 'getData'])->name('positions.get');
 
-    Route::resource('users', UsersController::class);
+    Route::resource('users', UsersController::class); 
 
     Route::get('leaves/create/{type?}', [LeaveController::class, 'create'])->name('leaves.create');
     Route::get('leaves/{type?}/{status?}', [LeaveController::class, 'index'])->name('leaves.index');

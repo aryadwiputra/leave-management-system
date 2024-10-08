@@ -62,13 +62,13 @@
                             </li>
                         @endcan
                         @can('melihat-role')
+                            <li class="nav-item">
+                                <a href="{{ route('dashboard.roles.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Roles</p>
+                                </a>
+                            </li>
                         @endcan
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard.roles.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Roles</p>
-                            </a>
-                        </li>
                         @can('melihat-karyawan')
                             <li class="nav-item">
                                 <a href="{{ route('dashboard.users.index') }}" class="nav-link">
@@ -271,6 +271,72 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 @php
                                     $count = \App\Models\Leave::where('type', 'lembur')
+                                        ->where('status', 'approved')
+                                        ->count();
+                                @endphp
+                                <p>Disetujui
+                                    @if ($count > 0)
+                                        <span class="badge badge-success right">{{ $count }}</span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-envelope"></i>
+                        <p>
+                            Perjalanan Dinas
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.create', ['type' => 'perjalanan-dinas']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Buat Pengajuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'perjalanan-dinas', 'status' => 'pending']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                @php
+                                    $count = \App\Models\Leave::where('type', 'perjalanan-dinas')
+                                        ->where('status', 'pending')
+                                        ->count();
+                                @endphp
+                                <p>Menunggu Disetujui
+                                    @if ($count > 0)
+                                        <span class="badge badge-info right">{{ $count }}</span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'perjalanan-dinas', 'status' => 'rejected']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                @php
+                                    $count = \App\Models\Leave::where('type', 'perjalanan-dinas')
+                                        ->where('status', 'rejected')
+                                        ->count();
+                                @endphp
+                                <p>Ditolak
+                                    @if ($count > 0)
+                                        <span class="badge badge-danger right">{{ $count }}</span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.leaves.index', ['type' => 'perjalanan-dinas', 'status' => 'approved']) }}"
+                                class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                @php
+                                    $count = \App\Models\Leave::where('type', 'perjalanan-dinas')
                                         ->where('status', 'approved')
                                         ->count();
                                 @endphp

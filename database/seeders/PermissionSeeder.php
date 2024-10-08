@@ -40,6 +40,12 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'permission-update']);
         Permission::create(['name' => 'permission-destroy']);
 
+        // Data Department
+        Permission::create(['name' => 'melihat-department']);
+        Permission::create(['name' => 'membuat-department']);
+        Permission::create(['name' => 'mengedit-department']);
+        Permission::create(['name' => 'menghapus-department']);
+
         // Data Karyawan
         Permission::create(['name' => 'melihat-karyawan']);
         Permission::create(['name' => 'membuat-karyawan']);

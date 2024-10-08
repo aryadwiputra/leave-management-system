@@ -136,8 +136,8 @@ class LeaveController extends Controller
                 return redirect()->route('dashboard.leaves.index', ['type' => 'izin'])->with('success', 'Izin berhasil dibuat');
             case 'lembur':
                 return redirect()->route('dashboard.leaves.index', ['type' => 'lembur'])->with('success', 'Lembur berhasil dibuat');
-            case 'dinas':
-                return redirect()->route('dashboard.leaves.index', ['type' => 'dinas'])->with('success', 'Izin dinas berhasil dibuat');
+            case 'perjalanan-dinas':
+                return redirect()->route('dashboard.leaves.index', ['type' => 'perjalanan-dinas'])->with('success', 'Izin perjalanan dinas berhasil dibuat');
         }
     }
 
