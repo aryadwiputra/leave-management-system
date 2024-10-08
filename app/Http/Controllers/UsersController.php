@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserLeave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
@@ -28,8 +29,9 @@ class UsersController extends Controller
     {
         $departments = Department::all();
         $positions = Position::all();
+        $roles = Role::all();
 
-        return view('pages.users.create', compact('departments', 'positions'));
+        return view('pages.users.create', compact('departments', 'positions', 'roles'));
     }
 
     /**
@@ -47,6 +49,7 @@ class UsersController extends Controller
             'join_year' => 'required',
             'password' => 'min:8',
             'repeat_password' => 'same:password',
+            'role' => 'required',
         ]);
 
         $user = new User();
@@ -60,6 +63,8 @@ class UsersController extends Controller
         $user->status = 'active';
         $user->password = bcrypt($request->password);
         $user->save();
+
+        $user->assignRole($request->role);
 
         return redirect()->route('dashboard.users.index')->with('success', 'User created successfully');
     }
@@ -84,8 +89,9 @@ class UsersController extends Controller
         $user = User::with(['position', 'department', 'leaves'])->find($id);
         $departments = Department::all();
         $positions = Position::all();
+        $roles = Role::all();
 
-        return view('pages.users.edit', compact('user', 'departments', 'positions'));
+        return view('pages.users.edit', compact('user', 'departments', 'positions', 'roles'));
     }
 
     /**
@@ -101,6 +107,7 @@ class UsersController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required',
             'join_year' => 'required',
+            'role' => 'required',
         ]);
 
         $user = User::find($id);
@@ -114,6 +121,8 @@ class UsersController extends Controller
         $user->join_year = $request->join_year;
         $user->status = $request->status;
         $user->save();
+
+        $user->syncRoles($request->role);
 
         return redirect()->route('dashboard.users.index')->with('success', 'User updated successfully');
     }

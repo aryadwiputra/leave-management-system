@@ -56,6 +56,20 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="select2" style="width: 100%;" id="role" name="role">
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="name">Nama</label>
                             <input type="text" name="name" class="form-control" id="name"
                                 placeholder="Masukkan Nama" value="{{ old('name') }}">
@@ -157,6 +171,11 @@
     <script>
         //Initialize Select2 Elements
         $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        })
 
         $('#userForm').on('submit', function(e) {
             // submit button to loading state

@@ -59,6 +59,23 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="select2" style="width: 100%;" id="role" name="role">
+                                @foreach ($roles as $role)
+                                    {{-- selected --}}
+                                    <option value="{{ $role->name }}"
+                                        {{ $role->name == $user->getRoleNames()->first() ? 'selected' : '' }}>
+                                        {{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="name">Nama</label>
                             <input type="text" name="name" class="form-control" id="name"
                                 placeholder="Masukkan Nama" value="{{ old('name', $user->name) }}">

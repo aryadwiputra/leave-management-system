@@ -17,27 +17,76 @@ class PermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // dashboard
-        Permission::create(['name' => 'dashboard-access']);
+        Permission::create(['name' => 'akses-dashboard']);
 
         // User Management
-        Permission::create(['name' => 'user-access']);
-        Permission::create(['name' => 'user-store']);
-        Permission::create(['name' => 'user-update']);
-        Permission::create(['name' => 'user-destroy']);
+        Permission::create(['name' => 'melihat-user']);
+        Permission::create(['name' => 'membuat-user']);
+        Permission::create(['name' => 'mengedit-user']);
+        Permission::create(['name' => 'menghapus-user']);
 
         // User Profile
-        Permission::create(['name' => 'profile-access']);
+        Permission::create(['name' => 'akses-profile']);
 
         // Role Management
-        Permission::create(['name' => 'role-access']);
-        Permission::create(['name' => 'role-store']);
-        Permission::create(['name' => 'role-update']);
-        Permission::create(['name' => 'role-destroy']);
+        Permission::create(['name' => 'melihat-role']);
+        Permission::create(['name' => 'membuat-role']);
+        Permission::create(['name' => 'mengedit-role']);
+        Permission::create(['name' => 'menghapus-role']);
 
         // Permission Management
         Permission::create(['name' => 'permission-access']);
         Permission::create(['name' => 'permission-store']);
         Permission::create(['name' => 'permission-update']);
         Permission::create(['name' => 'permission-destroy']);
+
+        // Data Karyawan
+        Permission::create(['name' => 'melihat-karyawan']);
+        Permission::create(['name' => 'membuat-karyawan']);
+        Permission::create(['name' => 'mengedit-karyawan']);
+        Permission::create(['name' => 'menghapus-karyawan']);
+
+        // Data Jabatan
+        Permission::create(['name' => 'melihat-jabatan']);
+        Permission::create(['name' => 'membuat-jabatan']);
+        Permission::create(['name' => 'mengedit-jabatan']);
+        Permission::create(['name' => 'menghapus-jabatan']);
+
+        // Data Cuti
+        Permission::create(['name' => 'melihat-cuti']);
+        Permission::create(['name' => 'membuat-cuti']);
+        Permission::create(['name' => 'mengedit-cuti']);
+        Permission::create(['name' => 'menghapus-cuti']);
+        Permission::create(['name' => 'menyetujui-cuti']);
+        Permission::create(['name' => 'menolak-cuti']);
+
+
+
+        // Data Izin
+        // Permission::create(['name' => 'melihat-izin']);
+        // Permission::create(['name' => 'membuat-izin']);
+        // Permission::create(['name' => 'mengedit-izin']);
+        // Permission::create(['name' => 'menolak-izin']);
+        // Permission::create(['name' => 'menyetujui-izin']);
+        // Permission::create(['name' => 'menghapus-izin']);
+
+        // // Data Cuti
+        // Permission::create(['name' => 'melihat-cuti']);
+        // Permission::create(['name' => 'membuat-cuti']);
+        // Permission::create(['name' => 'mengedit-cuti']);
+        // Permission::create(['name' => 'menolak-cuti']);
+        // Permission::create(['name' => 'menyetujui-cuti']);
+        // Permission::create(['name' => 'menghapus-cuti']);
+
+        // // Data Lembur
+        // Permission::create(['name' => 'melihat-lembur']);
+        // Permission::create(['name' => 'membuat-lembur']);
+        // Permission::create(['name' => 'mengedit-lembur']);
+        // Permission::create(['name' => 'menolak-lembur']);
+        // Permission::create(['name' => 'menyetujui-lembur']);
+        // Permission::create(['name' => 'menghapus-lembur']);
+
+        // Report
+        Permission::create(['name' => 'melihat-laporan']);
     }
 }
